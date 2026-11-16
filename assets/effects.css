@@ -1,0 +1,67 @@
+/* ============================================================
+   Python Mastery: polish layer (loaded after styles.css)
+   Spotlight cards, animated terminal border, heading underline,
+   code-block glow, button sheen, back-to-top. Safe to remove.
+   ============================================================ */
+.card,.source{position:relative;isolation:isolate}
+.card::before,.source::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;opacity:0;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(92,200,255,.16),transparent 65%);
+  transition:opacity .35s var(--ease);
+}
+.card:hover::before,.source:hover::before{opacity:1}
+
+@property --spin{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes fx-spin{to{--spin:360deg}}
+.hero .terminal{
+  transition:transform .5s var(--ease);
+  transform:perspective(1100px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+}
+.hero .terminal::before{
+  content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--spin,0deg),transparent 0 62%,var(--accent) 74%,var(--violet) 86%,transparent 96%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:fx-spin 7s linear infinite;
+}
+
+.term-body .term-out{transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.term-body .term-out.fx-wait{opacity:0;transform:translateY(4px)}
+
+.section-head h2{position:relative;display:inline-block;padding-bottom:6px}
+.section-head h2::after{
+  content:"";position:absolute;inset-inline-start:0;bottom:0;height:3px;width:100%;border-radius:3px;
+  background:linear-gradient(to left,var(--accent),var(--violet),transparent);
+  transform:scaleX(0);transform-origin:right center;transition:transform .9s var(--ease) .15s;
+}
+.section.fx-seen .section-head h2::after{transform:scaleX(1)}
+.section-index{transition:box-shadow .6s var(--ease)}
+.section.fx-seen .section-index{box-shadow:0 0 0 1px rgba(92,200,255,.25),0 12px 34px -14px rgba(92,200,255,.55)}
+
+.code-block{transition:border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.code-block:hover{border-color:rgba(92,200,255,.3);box-shadow:0 18px 44px -26px rgba(92,200,255,.5)}
+
+@keyframes fx-sheen{0%,60%{left:-60%}100%{left:130%}}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{
+  content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;transform:skewX(-20deg);pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  animation:fx-sheen 4.5s ease-in-out infinite;
+}
+
+.fx-top{
+  position:fixed;bottom:22px;inset-inline-start:22px;z-index:60;width:44px;height:44px;border-radius:14px;cursor:pointer;
+  border:1px solid var(--line-strong);background:var(--solid);color:var(--text);font-size:18px;box-shadow:var(--shadow);
+  opacity:0;transform:translateY(14px);pointer-events:none;
+  transition:opacity .3s var(--ease),transform .3s var(--ease),border-color .3s;
+}
+.fx-top.show{opacity:1;transform:none;pointer-events:auto}
+.fx-top:hover,.fx-top:focus-visible{border-color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){
+  .hero .terminal{transform:none}
+  .hero .terminal::before,.btn-primary::after{animation:none}
+  .section-head h2::after{transition:none;transform:scaleX(1)}
+  .term-body .term-out.fx-wait{opacity:1;transform:none}
+}
+@media print{.fx-top,.hero .terminal::before{display:none}}

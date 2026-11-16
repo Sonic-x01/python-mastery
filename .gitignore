@@ -1,0 +1,14 @@
+# Local runner scratch files and editor settings
+.runner/
+.claude/
+__pycache__/
+
+# Backups of the originals
+*.backup.*
+
+# Earlier "Python Path" site, kept locally only
+content/
+site/
+theme/
+tools/
+CHECKLIST.md
